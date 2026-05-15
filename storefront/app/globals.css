@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base ─────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --shopflow-primary: #6366f1;
+  --shopflow-glow: rgba(99, 102, 241, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --saffron: #FF9933;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #0d0d14;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+  min-height: 100vh;
+  color: white;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0A0A0A; }
+::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #525252; }
+
+/* ─── Glassmorphism ──────────────────────────────────────── */
+@layer components {
+  .glass {
+    @apply rounded-xl border;
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    backdrop-filter: blur(12px);
+  }
+
+  .glass-hover {
+    @apply glass transition-all duration-300;
+  }
+
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ─── Product Card ─── */
+  .product-card {
+    @apply glass p-6 flex flex-col gap-4 cursor-pointer transition-all duration-300;
+  }
+
+  .product-card:hover {
+    background: rgba(99, 102, 241, 0.06);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
+  }
+
+  /* ─── Buttons ─── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm
+           transition-all duration-300 cursor-pointer;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm
+           transition-all duration-300 cursor-pointer border;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm
+           transition-all duration-300 cursor-pointer;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+  }
+
+  .btn-danger:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.5);
+  }
+
+  /* ─── Badges ─── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  .badge-success { @apply badge; background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
+  .badge-warning { @apply badge; background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
+  .badge-error   { @apply badge; background: rgba(239, 68, 68, 0.12);  color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2);  }
+  .badge-info    { @apply badge; background: rgba(99, 102, 241, 0.12); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.2); }
+  .badge-pending { @apply badge; background: rgba(156, 163, 175, 0.1); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.2); }
+
+  /* ─── Nav Link ─── */
+  .nav-link {
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-400 transition-all duration-200;
+  }
+
+  .nav-link:hover {
+    @apply text-white;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-link.active {
+    @apply text-white;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    color: #a5b4fc;
+  }
+
+  /* ─── Toast ─── */
+  .toast {
+    @apply fixed top-5 right-5 z-50 flex items-start gap-3 px-5 py-4 rounded-xl border;
+    backdrop-filter: blur(12px);
+    max-width: 380px;
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .toast-error {
+    @apply toast;
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+
+  .toast-success {
+    @apply toast;
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+
+  /* ─── Input ─── */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl text-sm outline-none transition-all duration-200;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: white;
+  }
+
+  .input::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+  .input:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes slideInRight {
+  0%   { opacity: 0; transform: translateX(100%); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+
+/* ─── Utilities ──────────────────────────────────────────── */
+.glow-indigo {
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.15);
+}
+
+.dot-active {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+
+.dot-error {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f87171;
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* ─── SENTINEL Status Bar ──────────────────────────────── */
+.sentinel-bar {
+  background: rgba(255, 153, 51, 0.06);
+  border: 1px solid rgba(255, 153, 51, 0.15);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: rgba(255, 153, 51, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── Cart Item ──────────────────────────────────────────── */
+.cart-item {
+  @apply glass p-4 flex items-center gap-4 transition-all duration-200;
+}
+
+.cart-item:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
