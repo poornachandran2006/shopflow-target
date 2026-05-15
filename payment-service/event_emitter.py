@@ -86,7 +86,7 @@ def on_incident(service: str, incident_id: str, trigger: str, description: str):
     """Emit an incident event."""
     emit_sync([{
         "ts": _now(),
-        "kind": "incident",
+        "kind": "incident_signal",  # Changed from "incident" to "incident_signal"
         "service": service,
         "incident_id": incident_id,
         "trigger": trigger,
