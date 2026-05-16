@@ -94,6 +94,18 @@ def on_incident(service: str, incident_id: str, trigger: str, description: str):
     }])
 
 
+def on_topology_change(service: str, old_name: str, new_name: str):
+    """Emit a topology change event for service rename (GHOST event)."""
+    emit_sync([{
+        "ts": _now(),
+        "kind": "topology_change",
+        "service": service,
+        "old_name": old_name,
+        "new_name": new_name,
+        "msg": f"Service '{old_name}' has been renamed to '{new_name}'",
+    }])
+
+
 def on_remediation(incident_id: str, action: str, target: str, outcome: str):
     """Emit a remediation event."""
     emit_sync([{

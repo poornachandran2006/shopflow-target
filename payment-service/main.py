@@ -31,7 +31,7 @@ import httpx
 
 from event_emitter import (
     on_deploy, on_error, on_metric, on_incident,
-    on_remediation, emit_batch_async
+    on_remediation, on_topology_change, emit_batch_async
 )
 
 load_dotenv()
@@ -167,6 +167,10 @@ class RefundRequest(BaseModel):
     user_id: str
     amount: float
     reason: str = "customer_request"
+
+
+class RenameRequest(BaseModel):
+    new_name: str
 
 
 class PaymentResponse(BaseModel):
@@ -404,13 +408,36 @@ async def process_refund(payload: RefundRequest):
     )
 
 
+@app.post("/rename")
+async def rename_service(payload: RenameRequest):
+    """
+    Simulate a service rename event for the demo (Act 2).
+    This emits the GHOST event and updates the global SERVICE_NAME
+    so that subsequent events (in Act 3) are tagged with the new name.
+    """
+    global SERVICE_NAME
+    old_name = SERVICE_NAME
+    new_name = payload.new_name
+
+    # The service sending the event is the old one
+    on_topology_change(service=old_name, old_name=old_name, new_name=new_name)
+
+    # Update the global name for subsequent events in this session
+    SERVICE_NAME = new_name
+
+    return {
+        "status": "rename_event_sent",
+        "message": f"Sent GHOST event to Sentinel. Service '{old_name}' is now known as '{new_name}'.",
+    }
+
+
 @app.post("/reset")
 async def reset_state():
     """
     Reset service state — use this between demo runs.
     Simulates a service restart / rollback.
     """
-    global _error_count, _request_count, _incident_count, _latency_samples
+    global _error_count, _request_count, _incident_count, _latency_samples, SERVICE_NAME
     ConnectionPool._active.clear()
     ConnectionPool._total_created = 0
     ConnectionPool._total_errors = 0
@@ -418,6 +445,8 @@ async def reset_state():
     _request_count = 0
     _incident_count = 0
     _latency_samples = []
+    # Reset service name back to original from .env
+    SERVICE_NAME = os.getenv("SERVICE_NAME", "payment-service")
 
     on_remediation(
         incident_id="INC-002",
@@ -426,7 +455,7 @@ async def reset_state():
         outcome="success",
     )
 
-    return {"status": "reset", "message": "Service state cleared — all connections released"}
+    return {"status": "reset", "message": f"Service state cleared. Name reset to '{SERVICE_NAME}'."}
 
 
 @app.get("/")
@@ -441,6 +470,7 @@ async def root():
             "process": "POST /process",
             "refund": "POST /refund",
             "reset": "POST /reset",
+            "rename": "POST /rename",
         },
     }
 
